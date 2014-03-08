@@ -21,6 +21,7 @@ import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
 //import com.chaoticity.dependensee.*;
 
+
 public class StanfordCoreNlpDemo {
   
   static public List<String> PotentialBackground;
@@ -38,58 +39,26 @@ public class StanfordCoreNlpDemo {
 	    Attribute += " ";
             System.out.println("Attribute = "+Attribute);
         }
+	if(e.label.equalsIgnoreCase("nsubj"))
+	{
+            Node AttributeNode = e.target;
+	    if(IsNodeChildren(AttributeNode))
+	    {
+		ActorNode.mActorAttribute.bIsChildren = true;
+                System.out.println("Node "+ActorNode.lex+" is a children");
+	    }
+	}
      }
      System.out.println("Attribute return = "+Attribute);
      return Attribute;
   }  
 
-  static boolean IsFemalePronoun(Node n) {
-     if(n.lex.equalsIgnoreCase("she"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("her"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("hers"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("herself"))
+  static boolean IsNodeChildren(Node n) {
+     if(n.lex.equalsIgnoreCase("children"))
      	return true;
      return false;
   }
 
-  static boolean IsMalePronoun(Node n) {
-     if(n.lex.equalsIgnoreCase("he"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("his"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("him"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("himself"))
-     	return true;
-     return false;
-  }
-
-  static boolean IsFemaleKeyword(Node n) {
-     if(n.lex.equalsIgnoreCase("woman"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("lady"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("girl"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("actress"))
-     	return true;
-     return false;
-  } 
-
-  static boolean IsMaleKeyword(Node n) {
-     if(n.lex.equalsIgnoreCase("man"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("gentleman"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("boy"))
-     	return true;
-     if(n.lex.equalsIgnoreCase("actor"))
-     	return true;
-     return false;
-  } 
 
   //Currently we are not processing edge, we will do that latter
   static boolean processGender(Node n, Gender gender, String attribute)
@@ -144,456 +113,8 @@ public class StanfordCoreNlpDemo {
       return null;
   }  
 
-  static boolean isActionTypeWalk(String action)
-  {
-       if(action.equalsIgnoreCase("walk"))
-          return true;
-       if(action.equalsIgnoreCase("walks"))
-          return true;
-       if(action.equalsIgnoreCase("walking"))
-          return true;
-       if(action.equalsIgnoreCase("enter"))
-          return true;
-       if(action.equalsIgnoreCase("enters"))
-          return true;
-       if(action.equalsIgnoreCase("go"))
-          return true;
-       if(action.equalsIgnoreCase("goes"))
-          return true;
-       return false;
-  } 
+
  
-  static boolean isActionTypeRead(String action)
-  {
-       if(action.equalsIgnoreCase("read"))
-          return true;
-       if(action.equalsIgnoreCase("reads"))
-          return true;
-       if(action.equalsIgnoreCase("reading"))
-          return true;
-       if(action.equalsIgnoreCase("study"))
-          return true;
-       if(action.equalsIgnoreCase("learn"))
-          return true;
-       return false;
-  } 
-
-  static boolean isActionTypeStand(String action)
-  {
-       if(action.equalsIgnoreCase("stand"))
-          return true;
-       if(action.equalsIgnoreCase("stands"))
-          return true;
-       if(action.equalsIgnoreCase("standing"))
-          return true;
-       return false;
-  }  
- 
-  static boolean isActionTypeSay(String action)
-  {
-       if(action.equalsIgnoreCase("say"))
-          return true;
-       if(action.equalsIgnoreCase("says"))
-          return true;
-       return false;
-  }
-  
-  static boolean isActionTypeLook(String action)
-  {
-       if(action.equalsIgnoreCase("look"))
-          return true;
-       if(action.equalsIgnoreCase("looks"))
-          return true;
-       if(action.equalsIgnoreCase("face"))
-          return true;
-       if(action.equalsIgnoreCase("faces"))
-          return true;
-       return false;
-  } 
-
-  static boolean isActionTypeStart(String action)
-  {
-       if(action.equalsIgnoreCase("start"))
-          return true;
-       if(action.equalsIgnoreCase("starts"))
-          return true;
-       return false;
-  } 
-
-  static boolean isActionTypeRoll(String action)
-  {
-       if(action.equalsIgnoreCase("roll"))
-          return true;
-       if(action.equalsIgnoreCase("rolls"))
-          return true;
-       return false;
-  } 
-
-  static boolean isActionTypeWrite(String action)
-  {
-       if(action.equalsIgnoreCase("write"))
-          return true;
-       if(action.equalsIgnoreCase("writes"))
-          return true;
-       return false;
-  } 
-  
- 
-  static String processActionTypeWalk(Graph g)
-  {
-     String OutFile = "walk";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep_in"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep_towards"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n";//Actor2 is empty
-     OutFile += Where;
-     OutFile += " \n";
-     PotentialBackground.add(Where);
-     //OutFile += "Background:";
-     OutFile += Where;
-     OutFile += " \n";
-     return OutFile;
-  }
-
-  static String processActionTypeRead(Graph g)
-  {
-     String OutFile = "read";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-	else if(e.label.equalsIgnoreCase("dobj"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += Where;
-     OutFile += " \n";
-     PotentialBackground.add(Where);
-     //OutFile += "Background:";
-     OutFile += Where;
-     OutFile += " \n";
-     return OutFile;
-  }
-
-  static String processActionTypeStand(Graph g)
-  {
-     String OutFile = "stand";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep_near"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += Where;
-     OutFile += " \n";
-     PotentialBackground.add(Where);
-     //OutFile += "Background:";
-     OutFile += Where;
-     OutFile += " \n";
-     return OutFile;
-  }
-
-  static String processActionTypeLook(Graph g)
-  {
-     String OutFile = "look";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep_at"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep_to"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-	else if(e.label.equalsIgnoreCase("prep"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += Where;
-     OutFile += " \n";
-     OutFile += "\n";//Background is empty
-     return OutFile;
-  }
-
-  static String processActionTypeStart(Graph g)
-  {
-     String OutFile = "start";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-	else if(e.label.equalsIgnoreCase("xcomp"))
-        {
-            //This is currently approximate
-	    Where = e.target.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += Where;
-     OutFile += " \n";
-     OutFile += "\n"; //Background is empty
-     return OutFile;
-  }
-
-  static String processActionTypeRoll(Graph g)
-  {
-     String OutFile = "roll";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String Where = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nn"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-     }
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += "\n"; //Where is empty
-     OutFile += "\n"; //Background is empty
-     return OutFile;
-  }
-
-  static String processSayWhat(Graph g)
-  {
-     String What = "";
-     boolean bIsInsideDoubleQuotes = false;
-     for (Integer i : g.nodes.keySet()) 
-     {
-     	Node n = g.nodes.get(i);
-        if("\"".equals(n.pos))
-        {
-	   bIsInsideDoubleQuotes = !bIsInsideDoubleQuotes;
-        }
-        else if("``".equals(n.pos))
-        {
-	   bIsInsideDoubleQuotes = true;
-        }
-        else if("''".equals(n.pos))
-        {
-	   bIsInsideDoubleQuotes = false;
-        }
-        else if(bIsInsideDoubleQuotes == true)
-        {
-	   What += n.lex;
-           What += " ";
-        }
-     }
-     return What;
-  }
-   
-  static String processActionTypeSay(Graph g)
-  {
-     String OutFile = "say";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String What = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-     }
-
-     What = processSayWhat(g);     
-
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n"; //Actor2 is empty
-     OutFile += What;
-     OutFile += "\n";
-     OutFile += "\n"; //Background is empty
-     return OutFile;
-  }
-
-  static String processActionTypeWrite(Graph g)
-  {
-     String OutFile = "write";
-     OutFile += "\n";
-     Node root = g.root;
-     String Actor = "";
-     String What = "";
-     for (Edge e : root.outEdges)
-     {
-	if(e.label.equalsIgnoreCase("nsubj"))
-        {
-            Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
-        }
-     }
-
-     What = processSayWhat(g);     
-
-     OutFile += Actor;
-     OutFile += " \n";
-     OutFile += "\n";//Actor2 is empty
-     OutFile += What;
-     OutFile += "\n";
-     OutFile += "\n";//Background is empty
-     return OutFile;
-  }
-
-
   public static void main(String[] args) throws IOException, Exception {
 
     PotentialBackground = new ArrayList<String>();
@@ -841,14 +362,14 @@ public class StanfordCoreNlpDemo {
         {
               Node n = g.nodes.get(j);
               for (Node no : n.MentionList) {
-                   if(IsFemalePronoun(no))
+                   if(Synonyms.IsFemalePronoun(no))
                    {
                    	String attribute = CollectAttributes(no);
 			n.gender = Gender.GENDER_FEMALE;
                         n.attribute += " ";
                         n.attribute += attribute;
                    }
-                   else if(IsMalePronoun(no))
+                   else if(Synonyms.IsMalePronoun(no))
                    {
                    	String attribute = CollectAttributes(no);
 			n.gender = Gender.GENDER_MALE;
@@ -865,12 +386,12 @@ public class StanfordCoreNlpDemo {
         for (Integer j : g.nodes.keySet()) 
         {
               Node n = g.nodes.get(j);
-              if(IsFemaleKeyword(n))
+              if(Synonyms.IsFemaleKeyword(n))
               {
                    String attribute = CollectAttributes(n);
 	           boolean bIsGender = processGender(n, Gender.GENDER_FEMALE, attribute);
               }
-              else if(IsMaleKeyword(n))
+              else if(Synonyms.IsMaleKeyword(n))
               {
                    String attribute = CollectAttributes(n);
 	           boolean bIsGender = processGender(n, Gender.GENDER_MALE, attribute);
@@ -1001,55 +522,14 @@ public class StanfordCoreNlpDemo {
 
     counter = 0;
     int nNoOfActions = 0;
+    ProcessAction.init();
     for (Integer i : graphs.keySet()) {
         counter++;
     	Graph g = graphs.get(i);
-        if(isActionTypeWalk(g.root.lex))
-        {
-             OutString += processActionTypeWalk(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeRead(g.root.lex))
-        {
-             OutString += processActionTypeRead(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeStand(g.root.lex))
-        {
-             OutString += processActionTypeStand(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeLook(g.root.lex))
-        {
-             OutString += processActionTypeLook(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeStart(g.root.lex))
-        {
-             OutString += processActionTypeStart(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeRoll(g.root.lex))
-        {
-             OutString += processActionTypeRoll(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeSay(g.root.lex))
-        {
-             OutString += processActionTypeSay(g);
-	     nNoOfActions++;
-        }
-        else if(isActionTypeWrite(g.root.lex))
-        {
-             OutString += processActionTypeWrite(g);
-	     nNoOfActions++;
-        }
-        else
-        {
-	     //Currently do nothing
-     	     //OutString += g.root.lex;
-             //OutString += "\n";
-        }
+        ProcessAction.g = g;
+        ProcessAction.ProcessActionLookUp(g.root.lex);
+	OutString += ProcessAction.OutString;
+	nNoOfActions++;
         //OutString += "\n";
     }
 

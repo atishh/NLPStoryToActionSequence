@@ -32,6 +32,7 @@ public class Node implements Serializable {
     public boolean isActorPronoun;
     public String ActorNameInCasePronoun;
     public String attribute;
+    public ActorAttribute mActorAttribute;
     public Gender gender;
     public List<Node> RepresentativeMentionList;
     public List<Node> MentionList;
@@ -51,6 +52,7 @@ public class Node implements Serializable {
         RepresentativeMentionList = new ArrayList<Node>();
         MentionList = new ArrayList<Node>();
 	gender = Gender.GENDER_OTHER;
+	mActorAttribute = new ActorAttribute(label);
         isActorPronoun = false;
         attribute = "";
     }
@@ -65,6 +67,7 @@ public class Node implements Serializable {
         RepresentativeMentionList = new ArrayList<Node>();
         MentionList = new ArrayList<Node>();
 	gender = Gender.GENDER_OTHER;
+	mActorAttribute = new ActorAttribute(label);
         isActorPronoun = false;
         attribute = "";
     }
@@ -81,6 +84,7 @@ public class Node implements Serializable {
         RepresentativeMentionList = new ArrayList<Node>();        
         MentionList = new ArrayList<Node>();
 	gender = Gender.GENDER_OTHER;
+	mActorAttribute = new ActorAttribute(label);
         isActorPronoun = false;
         attribute = "";
     }

@@ -1,6 +1,6 @@
 LIBRARYDIR =../stanford-corenlp-full-2012-11-12
 VERSIONNO =1.3.4
-INPUT =input7
+INPUT =input4
 
 ifeq ($(VERSIONNO),1.3.4)
 LIBRARYDIR =../stanford-corenlp-full-2012-11-12
@@ -13,6 +13,9 @@ endif
 compile:
 	javac -cp $(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO).jar:$(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO)-models.jar:$(LIBRARYDIR)/xom.jar:$(LIBRARYDIR)/joda-time.jar:$(LIBRARYDIR)/jollyday.jar:$(LIBRARYDIR)/ejml-0.23.jar:. *.java
 
+compile_debug:
+	javac -g -cp $(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO).jar:$(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO)-models.jar:$(LIBRARYDIR)/xom.jar:$(LIBRARYDIR)/joda-time.jar:$(LIBRARYDIR)/jollyday.jar:$(LIBRARYDIR)/ejml-0.23.jar:. *.java
+
 run:
-	java -cp $(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO).jar:$(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO)-models.jar:$(LIBRARYDIR)/xom.jar:$(LIBRARYDIR)/joda-time.jar:$(LIBRARYDIR)/jollyday.jar:. -Xmx1g StanfordCoreNlpDemo  $(INPUT).txt $(INPUT).out $(INPUT).xml
+	java -cp $(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO).jar:$(LIBRARYDIR)/stanford-corenlp-$(VERSIONNO)-models.jar:$(LIBRARYDIR)/xom.jar:$(LIBRARYDIR)/joda-time.jar:$(LIBRARYDIR)/jollyday.jar:. -Xmx1g StanfordCoreNlpDemo  $(INPUT).txt $(INPUT).out $(INPUT).xml | tee log
 
