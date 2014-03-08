@@ -16,9 +16,11 @@ import edu.stanford.nlp.io.*;
 import edu.stanford.nlp.ling.*;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.trees.*;
-import edu.stanford.nlp.semgraph.SemanticGraph;
+//import edu.stanford.nlp.semgraph.SemanticGraph; for latest release enable latter
+import edu.stanford.nlp.trees.semgraph.SemanticGraph;
 import edu.stanford.nlp.util.*;
-import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
+//import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation; for latest release enable latter
+import edu.stanford.nlp.trees.semgraph.SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation;
 import edu.stanford.nlp.dcoref.CorefChain;
 import edu.stanford.nlp.dcoref.CorefCoreAnnotations.CorefChainAnnotation;
 import edu.stanford.nlp.process.DocumentPreprocessor;
