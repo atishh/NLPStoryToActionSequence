@@ -1,1 +1,0 @@
-javac -cp ../stanford-corenlp-full-2014-01-04/stanford-corenlp-3.3.1.jar:../stanford-corenlp-full-2014-01-04/stanford-corenlp-3.3.1-models.jar:../stanford-corenlp-full-2014-01-04/xom.jar:../stanford-corenlp-full-2014-01-04/joda-time.jar:../stanford-corenlp-full-2014-01-04/jollyday.jar:../stanford-corenlp-full-2014-01-04/ejml-0.23.jar:. *.java
