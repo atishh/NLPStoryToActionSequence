@@ -10,10 +10,28 @@ import java.util.*;
 
 //Transitive action are of type noun verb noun
 //The teenager earned a speeding ticket.
-
+//More Specifically actor verb action.
 public class ProcessAction
 {
 
+  public static String getActor(Node ActorNode)
+  {
+	String Actor = "";
+        Node ActualActorNode = null;
+        if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
+        {
+	    ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
+        }
+	if(ActualActorNode != null)
+	    ActorNode = ActualActorNode;
+        if(ActorNode.isActorPronoun)
+	    Actor = ActorNode.ActorNameInCasePronoun;
+        else
+	    Actor = ActorNode.lex;
+	
+	return Actor;
+  }
+  
   public static String processActionTypeWalk()
   {
      String OutFile = "walk";
@@ -26,17 +44,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
 	else if(e.label.equalsIgnoreCase("prep_in"))
         {
@@ -74,17 +82,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
 	else if(e.label.equalsIgnoreCase("dobj"))
         {
@@ -116,17 +114,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
 	else if(e.label.equalsIgnoreCase("prep_near"))
         {
@@ -158,17 +146,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
 	else if(e.label.equalsIgnoreCase("prep_at"))
         {
@@ -207,17 +185,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
 	else if(e.label.equalsIgnoreCase("xcomp"))
         {
@@ -246,17 +214,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nn"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
      }
      OutFile += Actor;
@@ -307,17 +265,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
      }
 
@@ -344,17 +292,7 @@ public class ProcessAction
 	if(e.label.equalsIgnoreCase("nsubj"))
         {
             Node ActorNode = e.target;
-            Node ActualActorNode = null;
-            if(!(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true))
-            {
-		ActualActorNode = StanfordCoreNlpDemo.identifyTheActor(ActorNode);
-            }
-	    if(ActualActorNode != null)
-		ActorNode = ActualActorNode;
-            if(ActorNode.isActorPronoun)
-		Actor = ActorNode.ActorNameInCasePronoun;
-            else
-	    	Actor = ActorNode.lex;
+            Actor = getActor(ActorNode);
         }
      }
 
@@ -373,6 +311,7 @@ public class ProcessAction
   public static Map<String, Runnable> processActionMap = new HashMap<String, Runnable>();
   public static Graph g;
   public static String OutString;
+  public static boolean bActionNotSupported;
   public static void init()
   {
 	//processActionMap.put("walk", ProcessAction::processActionTypeWalk);
@@ -416,6 +355,7 @@ public class ProcessAction
   public static void ProcessActionLookUp(String ActionType)
   {
 	OutString = "";
+        bActionNotSupported = false;
 	Runnable r = processActionMap.get(ActionType.toLowerCase());
 	if (r != null)
 	{
@@ -423,6 +363,7 @@ public class ProcessAction
 	}
 	else
 	{
+            bActionNotSupported = true;
 	    System.out.println("Currently Action Type "+ActionType+" is not supported");
 	}
   }

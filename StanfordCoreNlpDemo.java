@@ -417,6 +417,7 @@ public class StanfordCoreNlpDemo {
     
     //by default make all the children, if no gender is specified as female
     //TODO we can check corpus to find a particular name can be male or female
+    //be default make parent as male
     for (Integer i : graphs.keySet()) {
     	Graph g = graphs.get(i);
         for (Integer j : g.nodes.keySet()) 
@@ -426,6 +427,11 @@ public class StanfordCoreNlpDemo {
 	      {
 		if(n.gender == Gender.GENDER_OTHER)
 			n.gender = Gender.GENDER_FEMALE;
+	      }
+	      if(n.mActorAttribute.bIsParent == true)
+	      {
+		if(n.gender == Gender.GENDER_OTHER)
+			n.gender = Gender.GENDER_MALE;
 	      }
 	}
     }    
@@ -555,13 +561,31 @@ public class StanfordCoreNlpDemo {
     counter = 0;
     int nNoOfActions = 0;
     ProcessAction.init();
+    ProcessBackground.init();
     for (Integer i : graphs.keySet()) {
         counter++;
     	Graph g = graphs.get(i);
         ProcessAction.g = g;
         ProcessAction.ProcessActionLookUp(g.root.lex);
-	OutString += ProcessAction.OutString;
-	nNoOfActions++;
+        if(ProcessAction.bActionNotSupported == false)
+	{
+	     OutString += ProcessAction.OutString;
+	     nNoOfActions++;
+	}
+        else
+	{
+	     //verb might be to change background or mood of an actor
+             ProcessBackground.g = g;
+             ProcessBackground.ProcessBackgroundLookUp(g.root.lex);
+             if(ProcessBackground.bBackgroundNotSupported == false)
+	     {
+	     	OutString += ProcessBackground.OutString;
+	     }
+	     else
+	     {
+		//might be change of mood swing of actor TODO
+	     }
+	}
         //OutString += "\n";
     }
 

@@ -16,7 +16,15 @@ public class Synonyms{
      if(n.lex.equalsIgnoreCase("child"))
      	return true;
      return false;
-  } 
+  }
+ 
+  static boolean IsParentKeyword(Node n) {
+     if(n.lex.equalsIgnoreCase("parent"))
+	return true;
+     if(n.lex.equalsIgnoreCase("parents"))
+	return true;
+     return false;
+  }
 
   static boolean IsFemaleKeyword(Node n) {
      if(n.lex.equalsIgnoreCase("woman"))

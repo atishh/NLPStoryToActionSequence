@@ -76,6 +76,31 @@ public class ActorAttribute{
   	        }
 	     }
 	}
+	//Process parent, sometimes it might happen that parent doesn't have name
+	//in that case, make parents as actor.
+        //1. Martin and Nora are parents; in this case bIgnoreParentKeyword will be true
+        //   hence there is no need to make node parents as parent
+        //2. They go out with their parents; in this case there is no name for the parents
+	//   hence make node parents as parents and apparently as actor
+	if(Synonyms.IsParentKeyword(n))
+	{
+	     boolean bIgnoreParentKeyword = false;
+  	     for (Edge e : n.outEdges)
+  	     {
+  	        if(e.label.equalsIgnoreCase("nsubj"))
+  	        {
+	     	    bIgnoreParentKeyword = true;
+  	            Node TargetNode = e.target;
+  	            ActorAttribute TargetNodeAttribute = TargetNode.mActorAttribute;
+  	            TargetNodeAttribute.bIsParent = true;
+  	            System.out.println("Parent found "+TargetNode.lex);
+  	        }
+	     }
+	     if(bIgnoreParentKeyword == false)
+	     {
+		n.mActorAttribute.bIsParent = true;
+	     }
+	}
    }
 
    public String getAttributeString()
