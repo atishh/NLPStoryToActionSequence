@@ -10,6 +10,13 @@ import java.util.Set;
 
 public class Synonyms{
 
+  static boolean IsChildrenKeyword(Node n) {
+     if(n.lex.equalsIgnoreCase("children"))
+     	return true;
+     if(n.lex.equalsIgnoreCase("child"))
+     	return true;
+     return false;
+  } 
 
   static boolean IsFemaleKeyword(Node n) {
      if(n.lex.equalsIgnoreCase("woman"))

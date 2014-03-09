@@ -60,5 +60,52 @@ public class ActorAttribute{
 	bIsShort 	= false;
     }
 
+  public void populateActorAttribute(Node n)
+  {
+	//Process Children
+	if(Synonyms.IsChildrenKeyword(n))
+	{
+  	     for (Edge e : n.outEdges)
+  	     {
+  	        if(e.label.equalsIgnoreCase("nsubj"))
+  	        {
+  	            Node TargetNode = e.target;
+  	            ActorAttribute TargetNodeAttribute = TargetNode.mActorAttribute;
+  	            TargetNodeAttribute.bIsChildren = true;
+  	            System.out.println("Children found "+TargetNode.lex);
+  	        }
+	     }
+	}
+   }
+
+   public String getAttributeString()
+   {
+	String sReturnString = "";
+
+	if(bIsMale)
+		sReturnString += "male "; 	
+	if(bIsFemale)
+		sReturnString += "female "; 	
+	if(bIsChildren) 	
+		sReturnString += "children "; 	
+	if(bIsAdult) 	
+		sReturnString += "adult "; 	
+	if(bIsParent) 	
+		sReturnString += "parent "; 	
+	if(bIsBeautiful) 	
+		sReturnString += "beautiful "; 	
+	if(bIsSexy)	
+		sReturnString += "sexy "; 	
+	if(bIsSmart) 	
+		sReturnString += "smart "; 	
+	sReturnString += sHairStyle; 	
+	sReturnString += sDressStyle; 	
+	if(bIsFat) 		
+		sReturnString += "fat "; 	
+	if(bIsShort)	
+		sReturnString += "short";
+ 	
+	return sReturnString;
+   }
 }
 

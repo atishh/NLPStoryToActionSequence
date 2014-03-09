@@ -313,4 +313,18 @@ public class Main {
         int ystart = imageHeight - spaceHeight * (maxHeight + 3 * scale);
         return image.getSubimage(0, ystart, imageWidth, imageHeight - ystart);
     }
+
+    public static void printGraph(Graph graph) throws Exception {
+
+        for (Integer i : graph.nodes.keySet()) {
+            Node node = graph.nodes.get(i);
+            System.out.println(node.label + " ");
+            for (Edge e : node.outEdges) {
+            	System.out.println(e.label + " ");
+            }
+            System.out.println("\n");
+	}
+
+    }
+
 }

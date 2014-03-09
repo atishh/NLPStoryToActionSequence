@@ -187,13 +187,13 @@ public class StanfordCoreNlpDemo {
         // this is the NER label of the token
         String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);       
     	//System.out.println("Printing word starts\n");
-        System.out.println(word);
+        //System.out.println(word);
     	//System.out.println("Printing word ends\n");
     	//System.out.println("Printing pos starts\n");
-        System.out.println(pos);
+        //System.out.println(pos);
     	//System.out.println("Printing pos ends\n");
     	//System.out.println("Printing ne starts\n");
-        System.out.println(ne);
+        //System.out.println(ne);
     	//System.out.println("Printing ne ends\n");
       }
 
@@ -214,7 +214,8 @@ public class StanfordCoreNlpDemo {
         //image +=".png";
      	SemanticGraph dependencies = sentence.get(CollapsedCCProcessedDependenciesAnnotation.class);
         IndexedWord root = dependencies.getFirstRoot();
-        Graph g = Main.getGraph(sentence, tree, tdl);
+        //Graph g = Main.getGraph(sentence, tree, tdl);
+        Graph g = Main.getGraph(sentence, tree, dependencies.typedDependencies());
         System.out.println("root is " + root.word());
         g.setRoot(root.word());
         graphs.put(counter-1, g);
@@ -228,9 +229,14 @@ public class StanfordCoreNlpDemo {
       }
       System.out.println(sb);
       // this is the Stanford dependency graph of the current sentence
+     System.out.println("CollapsedCCProcessedDependenciesAnnotation prettyprint starts\n");
      dependencies.prettyPrint();
+     System.out.println("CollapsedCCProcessedDependenciesAnnotation prettyprint ends\n");
+
      System.out.printf("ROOT(root-0, %s-%d)%n", root.word(), root.index());
+     System.out.println("CollapsedCCProcessedDependenciesAnnotation toString starts\n");
      System.out.println(dependencies.toString("readable"));
+     System.out.println("CollapsedCCProcessedDependenciesAnnotation toString ends\n");
      System.out.println(dependencies.toList());
     }
     
@@ -353,6 +359,16 @@ public class StanfordCoreNlpDemo {
 	    
         }
     
+    //populate attribute of all the nodes
+    for (Integer i : graphs.keySet()) {
+    	Graph g = graphs.get(i);
+        for (Integer j : g.nodes.keySet()) 
+        {
+              Node n = g.nodes.get(j);
+	      n.mActorAttribute.populateActorAttribute(n);
+	}
+    }    
+
     //gender calculation (based on representative and mention list)
     counter = 0;
     for (Integer i : graphs.keySet()) {
@@ -399,6 +415,20 @@ public class StanfordCoreNlpDemo {
         }
     }
     
+    //by default make all the children, if no gender is specified as female
+    //TODO we can check corpus to find a particular name can be male or female
+    for (Integer i : graphs.keySet()) {
+    	Graph g = graphs.get(i);
+        for (Integer j : g.nodes.keySet()) 
+        {
+              Node n = g.nodes.get(j);
+	      if(n.mActorAttribute.bIsChildren == true)
+	      {
+		if(n.gender == Gender.GENDER_OTHER)
+			n.gender = Gender.GENDER_FEMALE;
+	      }
+	}
+    }    
 
     //Calculate no. of Actors and their attributes. Actors are always dynamic object.
     Hashtable ActorsFemale = new Hashtable();
@@ -421,6 +451,8 @@ public class StanfordCoreNlpDemo {
 		attribute += n.attribute;
 		attribute += " ";
 		attribute += attributeForThisNode;
+		attribute += " ";
+		attribute += n.mActorAttribute.getAttributeString();
 		attribute += " ";
               }
               else if(n.gender == Gender.GENDER_MALE)
@@ -564,7 +596,12 @@ public class StanfordCoreNlpDemo {
         Main.writeImage(g,image,3);
     }
          
-
+/*
+    for (Integer i : graphs.keySet()) {
+	Graph g = graphs.get(i);
+        Main.printGraph(g);
+    }
+*/
 
 /*
         String sentence="My dog also likes eating sausage.";
