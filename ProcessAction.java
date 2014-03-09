@@ -56,6 +56,11 @@ public class ProcessAction
             //This is currently approximate
 	    Where = e.target.lex;
         }
+	else if(e.label.equalsIgnoreCase("prep_to"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
      }
      OutFile += Actor;
      OutFile += " \n";
@@ -345,6 +350,9 @@ public class ProcessAction
 	processActionMap.put("looks", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
 	processActionMap.put("face", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
 	processActionMap.put("faces", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
+	processActionMap.put("see", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
+	processActionMap.put("gaze", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
+	processActionMap.put("gazed", new Runnable() { public void run() { OutString = processActionTypeLook(); } });
 
 	processActionMap.put("stand", new Runnable() { public void run() { OutString = processActionTypeStand(); } });
 	processActionMap.put("stands", new Runnable() { public void run() { OutString = processActionTypeStand(); } });

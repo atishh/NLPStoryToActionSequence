@@ -91,6 +91,7 @@ public class StanfordCoreNlpDemo {
        return IsGender;
   }
 
+  //Currently the assumption is that a action is done by only one actor which is a very bad assumptions.
   static Node identifyTheActor(Node ActorNode)
   {
      if(ActorNode.gender == Gender.GENDER_FEMALE || ActorNode.gender == Gender.GENDER_MALE || ActorNode.isActorPronoun == true)
@@ -110,6 +111,20 @@ public class StanfordCoreNlpDemo {
 		    return n;
            }
       }
+
+      //If we still not able to determine the actors.Then process RepresentativeMentionList in case it is pronoun,
+      //like they their
+      if(Synonyms.IsAmbigiousPronoun(ActorNode))
+      {
+	    Node returnNode = null;
+	    //Return the last node
+            for (Node n : ActorNode.RepresentativeMentionList) {
+		returnNode = n;
+            }
+	    if(returnNode != null)
+		return returnNode;
+      }
+
       return null;
   }  
 

@@ -75,6 +75,15 @@ public class Synonyms{
      return false;
   }
 
+  static boolean IsAmbigiousPronoun(Node n) {
+     if(n.lex.equalsIgnoreCase("they"))
+     	return true;
+     if(n.lex.equalsIgnoreCase("their"))
+     	return true;
+     return false;
+  }
+  
+
   static boolean isActionTypeStand(String action)
   {
        if(action.equalsIgnoreCase("stand"))
