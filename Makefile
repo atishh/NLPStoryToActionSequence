@@ -1,7 +1,7 @@
 LIBRARYDIR =../stanford-corenlp-full-2012-11-12
 VERSIONNO =1.3.4
 INPUT =input7
-JAVAFLAGS = -d ../bin
+JAVAFLAGS = -d ../bin -Xlint:unchecked
 
 ifeq ($(VERSIONNO),1.3.4)
 LIBRARYDIR =../stanford-corenlp-full-2012-11-12

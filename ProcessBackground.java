@@ -36,6 +36,42 @@ public class ProcessBackground
      return OutFile;
   }
 
+  public static String processBackgroundTypeTiny()
+  {
+     String OutFile = "Background: ";
+     OutFile += "tiny ";
+     Node root = g.root;
+     for (Edge e : root.outEdges)
+     {
+	if((e.label.equalsIgnoreCase("nsubj")))
+        {
+            Node BackgroundNode = e.target;
+	    OutFile += BackgroundNode.lex;
+	    OutFile += " ";
+        }
+     }
+     OutFile += " \n";
+     return OutFile;
+  }
+
+  public static String processBackgroundTypeComfort()
+  {
+     String OutFile = "Background: ";
+     OutFile += "comfort ";
+     Node root = g.root;
+     for (Edge e : root.outEdges)
+     {
+	if((e.label.equalsIgnoreCase("nsubj")))
+        {
+            Node BackgroundNode = e.target;
+	    OutFile += BackgroundNode.lex;
+	    OutFile += " ";
+        }
+     }
+     OutFile += " \n";
+     return OutFile;
+  }
+
 
   public static Map<String, Runnable> processBackgroundMap = new HashMap<String, Runnable>();
   public static Graph g;
@@ -50,6 +86,9 @@ public class ProcessBackground
 
 	processBackgroundMap.put("living", new Runnable() { public void run() { OutString = processBackgroundTypeLiving(); } });
 	processBackgroundMap.put("live", new Runnable() { public void run() { OutString = processBackgroundTypeLiving(); } });
+
+	processBackgroundMap.put("tiny", new Runnable() { public void run() { OutString = processBackgroundTypeTiny(); } });
+	processBackgroundMap.put("comfortable", new Runnable() { public void run() { OutString = processBackgroundTypeComfort(); } });
   }
  
   public static void ProcessBackgroundLookUp(String BackgroundType)

@@ -453,8 +453,8 @@ public class StanfordCoreNlpDemo {
     }    
 
     //Calculate no. of Actors and their attributes. Actors are always dynamic object.
-    Hashtable ActorsFemale = new Hashtable();
-    Hashtable ActorsMale = new Hashtable();
+    Hashtable<String,String> ActorsFemale = new Hashtable<String,String>();
+    Hashtable<String,String> ActorsMale = new Hashtable<String,String>();
     for (Integer i : graphs.keySet()) {
         Graph g = graphs.get(i);
         String genderName = "";
@@ -578,11 +578,12 @@ public class StanfordCoreNlpDemo {
     int nNoOfActions = 0;
     ProcessAction.init();
     ProcessBackground.init();
+    ProcessMood.init();
     for (Integer i : graphs.keySet()) {
         counter++;
     	Graph g = graphs.get(i);
         ProcessAction.g = g;
-        ProcessAction.ProcessActionLookUp(g.root.lex);
+        ProcessAction.ProcessActionWrapper(g.root.lex);
         if(ProcessAction.bActionNotSupported == false)
 	{
 	     OutString += ProcessAction.OutString;
@@ -599,7 +600,18 @@ public class StanfordCoreNlpDemo {
 	     }
 	     else
 	     {
-		//might be change of mood swing of actor TODO
+		//might be change of mood swing of actor
+		ProcessMood.g = g;
+                ProcessMood.ProcessMoodLookUp(g.root.lex);
+                if(ProcessMood.bMoodNotSupported == false)
+	        {
+	        	OutString += ProcessMood.OutString;
+	        }
+	        else
+	        {
+			//TODO something to do here.
+		}
+
 	     }
 	}
         //OutString += "\n";
