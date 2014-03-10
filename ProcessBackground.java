@@ -22,7 +22,7 @@ public class ProcessBackground
   {
      String OutFile = "Background: ";
      OutFile += "live ";
-     Node root = g.root;
+     Node root = RootNode;
      for (Edge e : root.outEdges)
      {
 	if((e.label.equalsIgnoreCase("prep_in")) || (e.label.equalsIgnoreCase("prep_by")))
@@ -40,7 +40,7 @@ public class ProcessBackground
   {
      String OutFile = "Background: ";
      OutFile += "tiny ";
-     Node root = g.root;
+     Node root = RootNode;
      for (Edge e : root.outEdges)
      {
 	if((e.label.equalsIgnoreCase("nsubj")))
@@ -58,10 +58,41 @@ public class ProcessBackground
   {
      String OutFile = "Background: ";
      OutFile += "comfort ";
-     Node root = g.root;
+     Node root = RootNode;
      for (Edge e : root.outEdges)
      {
 	if((e.label.equalsIgnoreCase("nsubj")))
+        {
+            Node BackgroundNode = e.target;
+	    OutFile += BackgroundNode.lex;
+	    OutFile += " ";
+        }
+     }
+     OutFile += " \n";
+     return OutFile;
+  }
+
+  public static String processBackgroundTypeIs()
+  {
+     Node root = RootNode;
+     for (Edge e : root.outEdges)
+     {
+	if((e.label.equalsIgnoreCase("nsubj")))
+        {
+            AnotherBackgroundNode = e.target;
+        }
+     }
+     return "";
+  }
+
+  public static String processBackgroundTypeSound()
+  {
+     String OutFile = "Background: ";
+     OutFile += "sound ";
+     Node root = RootNode;
+     for (Edge e : root.outEdges)
+     {
+	if((e.label.equalsIgnoreCase("prep_of")))
         {
             Node BackgroundNode = e.target;
 	    OutFile += BackgroundNode.lex;
@@ -77,24 +108,33 @@ public class ProcessBackground
   public static Graph g;
   public static String OutString;
   public static boolean bBackgroundNotSupported;
+  public static Node AnotherBackgroundNode;
+  public static Node RootNode;
  
   public static void init()
   {
 	//processBackgroundMap.put("walk", ProcessAction::processActionTypeWalk);
-	processBackgroundMap.put("camp", new Runnable() { public void run() { OutString = processBackgroundTypeCamp(); } });
-	processBackgroundMap.put("camping", new Runnable() { public void run() { OutString = processBackgroundTypeCamp(); } });
+	processBackgroundMap.put("camp", new Runnable() { public void run() { OutString += processBackgroundTypeCamp(); } });
+	processBackgroundMap.put("camping", new Runnable() { public void run() { OutString += processBackgroundTypeCamp(); } });
 
-	processBackgroundMap.put("living", new Runnable() { public void run() { OutString = processBackgroundTypeLiving(); } });
-	processBackgroundMap.put("live", new Runnable() { public void run() { OutString = processBackgroundTypeLiving(); } });
+	processBackgroundMap.put("living", new Runnable() { public void run() { OutString += processBackgroundTypeLiving(); } });
+	processBackgroundMap.put("live", new Runnable() { public void run() { OutString += processBackgroundTypeLiving(); } });
 
-	processBackgroundMap.put("tiny", new Runnable() { public void run() { OutString = processBackgroundTypeTiny(); } });
-	processBackgroundMap.put("comfortable", new Runnable() { public void run() { OutString = processBackgroundTypeComfort(); } });
+	processBackgroundMap.put("tiny", new Runnable() { public void run() { OutString += processBackgroundTypeTiny(); } });
+	processBackgroundMap.put("comfortable", new Runnable() { public void run() { OutString += processBackgroundTypeComfort(); } });
+
+	processBackgroundMap.put("is", new Runnable() { public void run() { OutString += processBackgroundTypeIs(); } });
+
+	processBackgroundMap.put("sound", new Runnable() { public void run() { OutString += processBackgroundTypeSound(); } });
   }
  
   public static void ProcessBackgroundLookUp(String BackgroundType)
   {
+	RootNode = g.root;
 	OutString = "";
         bBackgroundNotSupported = false;
+        AnotherBackgroundNode = null;
+	
 	Runnable r = processBackgroundMap.get(BackgroundType.toLowerCase());
 	if (r != null)
 	{
@@ -105,6 +145,22 @@ public class ProcessBackground
             bBackgroundNotSupported = true;
 	    System.out.println("Currently Background Type "+BackgroundType+" is not supported");
 	}
+
+	if(AnotherBackgroundNode != null)
+	{
+		RootNode = AnotherBackgroundNode;
+		r = processBackgroundMap.get(RootNode.lex.toLowerCase());
+		if (r != null)
+		{
+	    		r.run();
+		}
+		else
+		{
+	    		System.out.println("Currently Background Type "+BackgroundType+" is not supported");
+		}
+	}
+
+
   }
 
 }

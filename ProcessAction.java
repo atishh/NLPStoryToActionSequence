@@ -653,7 +653,65 @@ public class ProcessAction
      return OutFile;
   }
 
- 
+  public static String processActionTypeSleep()
+  {
+     String OutFile = "Action:sleep";
+     OutFile += "\n";
+     Node root = RootNode;
+     String Actor = "";
+     String Where = "";
+     for (Edge e : root.outEdges)
+     {
+	if(e.label.equalsIgnoreCase("nsubj") || e.label.equalsIgnoreCase("nn"))
+        {
+            Node ActorNode = e.target;
+            Actor += getActor(ActorNode);
+        }
+	else if(e.label.equalsIgnoreCase("advmod"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+     }
+     OutFile += Actor;
+     OutFile += " \n";
+     OutFile += "\n"; //Actor2 is empty
+     OutFile += Where;
+     OutFile += " \n";
+     StanfordCoreNlpDemo.PotentialBackground.add(Where);
+     //OutFile += "Background:";
+     OutFile += Where;
+     OutFile += " \n";
+     return OutFile;
+  }
+
+  public static String processActionTypeWake()
+  {
+     String OutFile = "Action:wake";
+     OutFile += "\n";
+     Node root = RootNode;
+     String Actor = "";
+     String Where = "";
+     for (Edge e : root.outEdges)
+     {
+	if(e.label.equalsIgnoreCase("nsubj") || e.label.equalsIgnoreCase("nn"))
+        {
+            Node ActorNode = e.target;
+            Actor += getActor(ActorNode);
+        }
+     }
+     OutFile += Actor;
+     OutFile += " \n";
+     OutFile += "\n"; //Actor2 is empty
+     OutFile += Where;
+     OutFile += " \n";
+     StanfordCoreNlpDemo.PotentialBackground.add(Where);
+     //OutFile += "Background:";
+     OutFile += Where;
+     OutFile += " \n";
+     return OutFile;
+  } 
+
   //public static Map<String, Runnable> processActionMap = new TreeMap<String, Runnable>(String.CASE_INSENSITIVE_ORDER);
   public static Map<String, Runnable> processActionMap = new HashMap<String, Runnable>();
   public static Graph g;
@@ -693,6 +751,8 @@ public class ProcessAction
 	processActionMap.put("says", new Runnable() { public void run() { OutString += processActionTypeSay(); } });
 	processActionMap.put("shouted", new Runnable() { public void run() { OutString += processActionTypeSay(); } });
 	processActionMap.put("replied", new Runnable() { public void run() { OutString += processActionTypeSay(); } });
+	processActionMap.put("yelled", new Runnable() { public void run() { OutString += processActionTypeSay(); } });
+	processActionMap.put("said", new Runnable() { public void run() { OutString += processActionTypeSay(); } });
 
 	processActionMap.put("roll", new Runnable() { public void run() { OutString += processActionTypeRoll(); } });
 	processActionMap.put("rolls", new Runnable() { public void run() { OutString += processActionTypeRoll(); } });
@@ -736,6 +796,12 @@ public class ProcessAction
 	processActionMap.put("join", new Runnable() { public void run() { OutString += processActionTypeJoin(); } });
 	processActionMap.put("joined", new Runnable() { public void run() { OutString += processActionTypeJoin(); } });
 
+	processActionMap.put("sleep", new Runnable() { public void run() { OutString += processActionTypeSleep(); } });
+	processActionMap.put("slept", new Runnable() { public void run() { OutString += processActionTypeSleep(); } });
+
+	processActionMap.put("wake", new Runnable() { public void run() { OutString += processActionTypeWake(); } });
+	processActionMap.put("woke", new Runnable() { public void run() { OutString += processActionTypeWake(); } });
+  
   }
  
   public static void ProcessActionWrapper(String ActionType)
