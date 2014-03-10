@@ -80,6 +80,8 @@ public class Synonyms{
      	return true;
      if(n.lex.equalsIgnoreCase("their"))
      	return true;
+     if(n.lex.equalsIgnoreCase("it"))
+     	return true;
      return false;
   }
   

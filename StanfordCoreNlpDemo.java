@@ -116,6 +116,7 @@ public class StanfordCoreNlpDemo {
       //like they their
       if(Synonyms.IsAmbigiousPronoun(ActorNode))
       {
+                    System.out.println("Ambigious pronoun found = "+ActorNode);
 	    Node returnNode = null;
 	    //Return the last node
             for (Node n : ActorNode.RepresentativeMentionList) {
