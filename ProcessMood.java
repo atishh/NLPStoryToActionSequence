@@ -58,6 +58,7 @@ public class ProcessMood
 	processMoodMap.put("hungry", new Runnable() { public void run() { OutString = processMoodTypeHungry(); } });
 	
 	processMoodMap.put("excited", new Runnable() { public void run() { OutString = processMoodTypeExcited(); } });
+	processMoodMap.put("happy", new Runnable() { public void run() { OutString = processMoodTypeExcited(); } });
 
   }
  

@@ -160,13 +160,19 @@ public class ProcessAction
         }
 	else if(e.label.equalsIgnoreCase("advmod"))
         {
+	    boolean bPrepToFound = false;
      	    for (Edge e1 : e.target.outEdges)
      	    {
 		if(e1.label.equalsIgnoreCase("prep_to"))
         	{
             	    //This is currently approximate
 	    	    Where = e1.target.lex;
+		    bPrepToFound = true;
         	}
+	    }
+	    if(bPrepToFound == false)
+	    {
+	    	Where = e.target.lex;
 	    }
 	 }
      }
@@ -367,6 +373,16 @@ public class ProcessAction
 	    Where = e.target.lex;
         }
 	else if(e.label.equalsIgnoreCase("prep_to"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+	else if(e.label.equalsIgnoreCase("prep_for"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+	else if(e.label.equalsIgnoreCase("prep_over"))
         {
             //This is currently approximate
 	    Where = e.target.lex;
@@ -710,7 +726,76 @@ public class ProcessAction
      OutFile += Where;
      OutFile += " \n";
      return OutFile;
-  } 
+  }
+
+  public static String processActionTypeFly()
+  {
+     String OutFile = "Action:fly";
+     OutFile += "\n";
+     Node root = RootNode;
+     String Actor = "";
+     String Where = "";
+     for (Edge e : root.outEdges)
+     {
+	if(e.label.equalsIgnoreCase("nsubj") || e.label.equalsIgnoreCase("nn"))
+        {
+            Node ActorNode = e.target;
+            Actor += getActor(ActorNode);
+        }
+	else if(e.label.equalsIgnoreCase("advmod"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+     }
+     OutFile += Actor;
+     OutFile += " \n";
+     OutFile += "\n"; //Actor2 is empty
+     OutFile += Where;
+     OutFile += " \n";
+     StanfordCoreNlpDemo.PotentialBackground.add(Where);
+     //OutFile += "Background:";
+     OutFile += Where;
+     OutFile += " \n";
+     return OutFile;
+  }
+
+  public static String processActionTypeScramble()
+  {
+     String OutFile = "Action:scramble";
+     OutFile += "\n";
+     Node root = RootNode;
+     String Actor = "";
+     String Where = "";
+     for (Edge e : root.outEdges)
+     {
+	if(e.label.equalsIgnoreCase("nsubj") || e.label.equalsIgnoreCase("nn"))
+        {
+            Node ActorNode = e.target;
+            Actor += getActor(ActorNode);
+        }
+	else if(e.label.equalsIgnoreCase("advmod"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+	else if(e.label.equalsIgnoreCase("prep_into"))
+        {
+            //This is currently approximate
+	    Where = e.target.lex;
+        }
+     }
+     OutFile += Actor;
+     OutFile += " \n";
+     OutFile += "\n"; //Actor2 is empty
+     OutFile += Where;
+     OutFile += " \n";
+     StanfordCoreNlpDemo.PotentialBackground.add(Where);
+     //OutFile += "Background:";
+     OutFile += Where;
+     OutFile += " \n";
+     return OutFile;
+  }
 
   //public static Map<String, Runnable> processActionMap = new TreeMap<String, Runnable>(String.CASE_INSENSITIVE_ORDER);
   public static Map<String, Runnable> processActionMap = new HashMap<String, Runnable>();
@@ -725,6 +810,7 @@ public class ProcessAction
 	processActionMap.put("walk", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
 	processActionMap.put("walks", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
 	processActionMap.put("walking", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
+	processActionMap.put("walked", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
 	processActionMap.put("go", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
 	processActionMap.put("goes", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
 	processActionMap.put("enter", new Runnable() { public void run() { OutString += processActionTypeWalk(); } });
@@ -764,12 +850,15 @@ public class ProcessAction
 	processActionMap.put("look", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("looks", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("looked", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
+	processActionMap.put("looking", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("face", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("faces", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("see", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("saw", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("gaze", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 	processActionMap.put("gazed", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
+	processActionMap.put("peep", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
+	processActionMap.put("peeping", new Runnable() { public void run() { OutString += processActionTypeLook(); } });
 
 	processActionMap.put("stand", new Runnable() { public void run() { OutString += processActionTypeStand(); } });
 	processActionMap.put("stood", new Runnable() { public void run() { OutString += processActionTypeStand(); } });
@@ -778,6 +867,7 @@ public class ProcessAction
 
 	processActionMap.put("sit", new Runnable() { public void run() { OutString += processActionTypeSit(); } });
 	processActionMap.put("sits", new Runnable() { public void run() { OutString += processActionTypeSit(); } });
+	processActionMap.put("sat", new Runnable() { public void run() { OutString += processActionTypeSit(); } });
 
 	processActionMap.put("make", new Runnable() { public void run() { OutString += processActionTypeMake(); } });
 	processActionMap.put("made", new Runnable() { public void run() { OutString += processActionTypeMake(); } });
@@ -802,6 +892,11 @@ public class ProcessAction
 	processActionMap.put("wake", new Runnable() { public void run() { OutString += processActionTypeWake(); } });
 	processActionMap.put("woke", new Runnable() { public void run() { OutString += processActionTypeWake(); } });
   
+	processActionMap.put("fly", new Runnable() { public void run() { OutString += processActionTypeFly(); } });
+	processActionMap.put("flew", new Runnable() { public void run() { OutString += processActionTypeFly(); } });
+
+	processActionMap.put("scramble", new Runnable() { public void run() { OutString += processActionTypeScramble(); } });
+	processActionMap.put("scrambled", new Runnable() { public void run() { OutString += processActionTypeScramble(); } });
   }
  
   public static void ProcessActionWrapper(String ActionType)
