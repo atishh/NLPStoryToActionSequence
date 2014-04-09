@@ -496,7 +496,16 @@ public class StanfordCoreNlpDemo {
 	        }
                 else if(isPreviousGenderMale == true)
 		{
-		   ActorsMale.put(genderName, attribute);
+		   if(Synonyms.IsParentKeyword(genderName.trim()) == true)
+		   {
+	 	       //This will convert "parents" into 2 names ie unidentified1, unidentified2
+		       ActorsMale.put("unidentified1", " " + genderName + " " + attribute);
+		       ActorsMale.put("unidentified2", " " + genderName + " " + attribute);
+		   }
+		   else
+		   {
+		       ActorsMale.put(genderName, attribute);
+		   }
 		}
 		isPreviousGenderFemale = false;
 		isPreviousGenderMale = false;
