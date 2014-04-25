@@ -66,7 +66,7 @@ public class ProcessAction
         }
 
      }
-     String OutFile = "Background:";
+     String OutFile = "Background: ";
      OutFile += Where;
      OutFile += "\n";
      OutFile += "Action:walk";
