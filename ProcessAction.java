@@ -34,8 +34,6 @@ public class ProcessAction
   
   public static String processActionTypeWalk()
   {
-     String OutFile = "Action:walk";
-     OutFile += "\n";
      Node root = RootNode;
      String Actor = "";
      String Where = "";
@@ -68,6 +66,11 @@ public class ProcessAction
         }
 
      }
+     String OutFile = "Background:";
+     OutFile += Where;
+     OutFile += "\n";
+     OutFile += "Action:walk";
+     OutFile += "\n";
      OutFile += Actor;
      OutFile += " \n";
      OutFile += "\n";//Actor2 is empty
